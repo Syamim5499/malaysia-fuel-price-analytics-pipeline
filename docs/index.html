@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101c2e">
+  <title>Malaysia Fuel Price BI | Syamim Idris</title>
+  <meta name="description" content="Explore official Malaysian fuel prices with historical trends, monthly averages, regional diesel comparisons and downloadable data.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23101c2e'/%3E%3Cpath d='M16 45V28h8v17m8 0V18h8v27m8 0V33h5v12' fill='none' stroke='%23e9ef59' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="snapshot.js" defer></script><script src="echarts.min.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to dashboard</a>
+  <header class="topbar"><div class="shell topbar-inner"><a class="brand" href="https://syamim-idris-portfolio.syamimmab.chatgpt.site"><span class="brand-mark">s.</span><span>Syamim Idris <small>DATA & ANALYTICS</small></span></a><a class="portfolio-link" href="https://syamim-idris-portfolio.syamimmab.chatgpt.site/#work">Portfolio</a></div></header>
+  <main id="main" class="shell">
+    <section class="dashboard-heading"><div><p class="eyebrow">PUBLIC DATA / MALAYSIA</p><h1>Fuel price intelligence</h1><p class="intro">Official prices. Historical trends. Regional comparisons.</p></div><button id="refresh" class="button primary" type="button">Refresh official data</button></section>
+    <div class="data-status"><p id="load-status" role="status" aria-live="polite">Loading the saved official dataset…</p><a href="https://data.gov.my/data-catalogue/fuelprice" target="_blank" rel="noopener noreferrer">Source: data.gov.my</a></div>
+    <section class="filter-panel" aria-label="Dashboard filters">
+      <div class="date-controls"><div><label for="start-date">From</label><input type="date" id="start-date"></div><div><label for="end-date">To</label><input type="date" id="end-date"></div><div class="presets" role="group" aria-label="Date range shortcuts"><button type="button" data-period="3">3 months</button><button type="button" data-period="12" aria-pressed="true">12 months</button><button type="button" data-period="all">All history</button></div><button id="reset" class="button secondary" type="button">Reset filters</button></div>
+      <fieldset class="fuel-fieldset"><legend>Fuel categories</legend><div id="fuel-options" class="fuel-options"></div></fieldset>
+      <p id="filter-message" class="filter-message" role="status" aria-live="polite"></p>
+    </section>
+    <section aria-labelledby="prices-heading"><div class="section-line"><h2 id="prices-heading">Latest prices in your range</h2><span>RM per litre · change from previous observation</span></div><div id="price-cards" class="price-cards"></div></section>
+    <section class="chart-grid" aria-label="Fuel price analytics">
+      <article class="chart-panel trend-panel"><div class="panel-heading"><div><h2>Price trends</h2><p>Published price levels across your selected period</p></div><span class="unit">RM / L</span></div><div id="trend-chart" class="chart large-chart" role="img" aria-label="Line chart of selected fuel prices over time"></div></article>
+      <article class="chart-panel"><div class="panel-heading"><div><h2>Latest price comparison</h2><p>Each category’s latest available observation in range</p></div></div><div id="comparison-chart" class="chart" role="img" aria-label="Bar chart comparing the latest selected fuel prices"></div></article>
+      <article class="chart-panel"><div class="panel-heading"><div><h2>Monthly averages</h2><p>Mean of published observations, rather than a daily average</p></div></div><div id="monthly-chart" class="chart" role="img" aria-label="Line chart of monthly mean published fuel prices"></div></article>
+      <article class="chart-panel gap-panel"><div class="panel-heading"><div><h2>Regional diesel gap</h2><p>Peninsular diesel minus East Malaysia diesel on the same date</p></div><div class="gap-kpi"><strong id="gap-value">—</strong><span id="gap-date">RM / L</span></div></div><div id="gap-chart" class="chart" role="img" aria-label="Line chart of the diesel price difference between regions"></div></article>
+    </section>
+    <section class="table-panel" aria-labelledby="table-heading"><div class="panel-heading"><div><h2 id="table-heading">Explore the source records</h2><p id="table-subtitle">Selected fuel categories and effective dates</p></div><button id="download" class="button secondary" type="button">Download filtered CSV</button></div><div class="table-scroll" role="region" aria-label="Filtered price records" tabindex="0"><table id="data-table"><thead></thead><tbody></tbody></table></div><div class="pagination"><p id="page-status" aria-live="polite"></p><div><button id="previous-page" class="button secondary" type="button">Previous</button><button id="next-page" class="button secondary" type="button">Next</button></div></div></section>
+    <details class="data-notes"><summary>Data definitions and analysis notes</summary><div><p><strong>Source:</strong> the official data.gov.my fuel-price catalogue, using its price-level series. Values are in Malaysian ringgit per litre. Dates are the published effective dates.</p><p><strong>Categories:</strong> RON95 and RON97 are the catalogue’s standard series. BUDI95, SKPS, BUDI diesel and SKDS are shown separately. Scheme eligibility and allowances are outside this dashboard.</p><p><strong>Calculations:</strong> price movement compares the latest observed value with the preceding available value for that category. Monthly averages use only observations in the chosen date range. The diesel gap requires both regional values on the same date. Missing values stay missing.</p><p><strong>Freshness:</strong> the dashboard includes a saved official-data snapshot and attempts a fresh API request when opened. If that request fails, the saved data remains available with its effective date clearly shown. Chart zoom changes the visible chart window; date filters determine the KPI, monthly and table calculations.</p><p><strong>Project:</strong> this browser dashboard reads the official API. The <a href="https://github.com/Syamim5499/malaysia-fuel-price-analytics-pipeline" target="_blank" rel="noopener noreferrer">source repository</a> separately demonstrates an Airflow, PostgreSQL and Streamlit pipeline.</p></div></details>
+    <footer><span>A public-data BI case study by Syamim Idris</span><span id="coverage">Official source coverage</span></footer>
+  </main>
+  <noscript><p class="noscript">Enable JavaScript to use the filters, charts and data table.</p></noscript>
+</body>
+</html>

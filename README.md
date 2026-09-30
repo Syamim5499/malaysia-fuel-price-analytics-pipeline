@@ -2,6 +2,22 @@
 
 An end-to-end portfolio study using the Malaysian government's [weekly retail fuel prices](https://data.gov.my/data-catalogue/fuelprice). An Apache Airflow DAG retrieves a full `level` series snapshot from the [data.gov.my catalogue API](https://developer.data.gov.my/static-api/data-catalogue), validates it, and publishes raw records, a weekly table, and two analytics marts in PostgreSQL. A Streamlit dashboard queries the marts directly.
 
+## Browser BI dashboard
+
+The interactive browser dashboard is in [`docs/`](docs/). It includes date and fuel filters, latest prices and movements, historical trends, observed monthly averages, a regional diesel comparison, and filtered CSV download.
+
+This dashboard reads the official API directly and includes an official-data snapshot through **24 September 2026** for availability when a refresh fails. It clearly reports the data's effective date. The Docker/Streamlit dashboard below remains the SQL-backed demonstration of the Airflow pipeline.
+
+### Publish with GitHub Pages
+
+In this repository's **Settings → Pages**, select **Deploy from a branch**, then **main** and **/docs**, and save. GitHub publishes the dashboard at:
+
+`https://syamim5499.github.io/malaysia-fuel-price-analytics-pipeline/`
+
+The address becomes available after Pages is enabled and its deployment succeeds. Later commits to `docs/` redeploy automatically. No API key, server, or build step is required. To run the browser version locally, open `docs/index.html`, or serve the `docs` folder using `python -m http.server 8000 --directory docs`.
+
+The vendored Apache ECharts 5.6.0 library and its licenses are included in `docs/`. Source data: Government of Malaysia, data.gov.my, CC BY 4.0.
+
 ## Architecture
 
 ```mermaid
@@ -73,7 +89,7 @@ docker compose config -q
 docker compose logs airflow-scheduler --tail=100
 ```
 
-If the DAG fails, inspect its task log in Airflow. A stale dataset, API schema change, missing database credentials, or rate limiting should fail visibly. The official API must be reachable from the machine running Docker. The project does not include a historical data dump or mock a successful production load.
+If the DAG fails, inspect its task log in Airflow. A stale dataset, API schema change, missing database credentials, or rate limiting should fail visibly. The official API must be reachable from the machine running Docker. The warehouse pipeline reads the live source; it does not use the browser dashboard's saved snapshot or mock a successful production load.
 
 ## Interpretation and attribution
 
